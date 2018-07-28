@@ -1,0 +1,26 @@
+<div class="panel panel-default post-item">
+    {% if post_type == 'list' %}
+    <a href="{% url 'post:post_detail' post_pk=post.pk %}">
+        <img src="{{ post.photo.url }}" alt="" class="post-image">
+    </a>
+    {% else %}
+        <img src="{{ post.photo.url }}" alt="" class="post-image">
+    {% endif %}
+    <div class="panel-body">
+        {% if post.comments.exists %}
+        <ul class="comment-list">
+            {% for comment in post.comments.all %}
+            <li class="comment">
+                <span class="comment-author">{{ comment.author }}</span>
+                <span class="comment-content">{{ comment.content }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <hr>
+        {% endif %}
+        <form action="{% url 'post:comment_create' post_pk=post.pk %}" method="POST" class="comment-form">
+            {% csrf_token %}
+            {{ comment_form.content }}
+        </form>
+    </div>
+</div>
